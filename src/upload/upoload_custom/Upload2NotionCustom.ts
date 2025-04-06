@@ -336,13 +336,29 @@ export class Upload2NotionCustom extends UploadBaseCustom {
 
 		// console.log(properties)
 
-		return {
+		// 创建基本对象并添加表情符号
+		const bodyString: any = {
 			parent: {
 				database_id: this.dbDetails.databaseID,
 			},
 			properties,
 			children: childArr,
+			icon: {
+				emoji: "📝"  // 添加默认的笔记表情符号
+			}
 		};
+
+		// 优先使用插件设置中的bannerUrl，如果没有则使用默认封面图
+		const defaultCoverUrl = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=7200";
+		
+		bodyString.cover = {
+			type: "external",
+			external: {
+				url: this.plugin.settings.bannerUrl || defaultCoverUrl
+			}
+		};
+
+		return bodyString;
 	}
 
 }
